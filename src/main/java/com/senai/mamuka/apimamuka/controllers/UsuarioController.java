@@ -4,15 +4,20 @@ package com.senai.mamuka.apimamuka.controllers;
 import com.senai.mamuka.apimamuka.dtos.UsuariosDto;
 import com.senai.mamuka.apimamuka.models.UsuariosModel;
 import com.senai.mamuka.apimamuka.repositories.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,7 +27,6 @@ import java.util.UUID;
 public class UsuarioController {
     @Autowired
     UsuarioRepository usuarioRepository;
-
 
     @GetMapping
     public ResponseEntity<List<UsuariosModel>> listarUsuarios() {
@@ -41,6 +45,11 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @Operation(summary = "Método para criar um usuário", method = "POST")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Cadastro de Usuário feito com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Parâmetros inválidos")
+    })
     public ResponseEntity<Object> cadastrarUsuario(@RequestBody @Valid UsuariosDto usuarioDto) {
         if (usuarioRepository.findByEmail(usuarioDto.email()) != null) {
             // Não pode cadastrar
@@ -48,6 +57,13 @@ public class UsuarioController {
         }
         UsuariosModel usuario = new UsuariosModel();
         BeanUtils.copyProperties(usuarioDto, usuario);
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+
+
+
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioDto.senha());
+        usuario.setSenha(senhaCriptografada);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
     }
 
@@ -62,6 +78,11 @@ public class UsuarioController {
         UsuariosModel usuario = new UsuariosModel();
 
         BeanUtils.copyProperties(usuarioDto, usuario);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+
+        String senhaCriptografada = new BCryptPasswordEncoder().encode(usuarioDto.senha());
+        usuario.setSenha(senhaCriptografada);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
     }

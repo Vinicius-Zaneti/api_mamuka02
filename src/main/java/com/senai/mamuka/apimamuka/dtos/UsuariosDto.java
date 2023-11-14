@@ -15,7 +15,9 @@ public record UsuariosDto(
         @NotBlank String perfil,
         @NotBlank String cargo,
         @NotBlank @Email(message = "O email deve estar em um formato válido") String email,
-        String id_tipoUsuario // temporario ?) {
+        String id_tipoUsuario, // temporario ?)
+
+        @NotBlank String senha
 
 ) {
 }

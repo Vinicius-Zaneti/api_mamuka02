@@ -34,5 +34,6 @@ public class UsuariosModel implements Serializable {
     private String cargo;
     private String email;
     private String id_tipoUsuario; // temporario ?
+    private String senha;
 
 }
