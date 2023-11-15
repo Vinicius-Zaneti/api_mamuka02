@@ -1,23 +1,17 @@
 package com.senai.mamuka.apimamuka.models;
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+public enum TipoUsuarioModel {
+    ADMIN("admin"),
+    DESENVOLVEDOR("dev"),
+    CLIENTE("gestor");
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.UUID;
+    private String tipo;
 
-@Getter
-@Setter
-@Entity
-@Table(name = "tipo_usuario_model")
-public class TipoUsuarioModel implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+    TipoUsuarioModel(String tipo) {
+        this.tipo = tipo;
+    }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private UUID id;
+    public String getRole() {
+        return tipo;
+    }
 }

@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
-
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
@@ -22,6 +21,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Autowired
     UsuarioRepository usuarioRepository;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -35,7 +35,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             var email = tokenService.validarToken(token);
 
-            UserDetails usuario = (UserDetails) usuarioRepository.findByEmail(email);
+            UserDetails usuario = usuarioRepository.findByEmail(email);
 
             var autenticacao = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
 
@@ -53,4 +53,5 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         return authHeader.replace("Bearer ", "");
     }
+
 }

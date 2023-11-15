@@ -2,7 +2,7 @@ package com.senai.mamuka.apimamuka.controllers;
 
 import com.senai.mamuka.apimamuka.dtos.LoginDto;
 import com.senai.mamuka.apimamuka.dtos.TokenDto;
-import com.senai.mamuka.apimamuka.models.UsuariosModel;
+import com.senai.mamuka.apimamuka.models.UsuarioModel;
 import com.senai.mamuka.apimamuka.services.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class LoginController {
 
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.gerarToken( (UsuariosModel) auth.getPrincipal() );
+        var token = tokenService.gerarToken( (UsuarioModel) auth.getPrincipal() );
 
         return ResponseEntity.status(HttpStatus.OK).body(new TokenDto(token));
     }
